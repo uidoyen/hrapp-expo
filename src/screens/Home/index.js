@@ -1,27 +1,23 @@
 import React, {Component} from "react";
-import {Image, Text, View, ActionSheetIOS, Picker, Platform, TouchableOpacity, Button} from "react-native";
-import styles from "./style";
+import { Text, Container, Content} from "native-base";
 import { connect } from 'react-redux';
 import { increment } from '../../actions';
 
-class Home extends Component {
-  constructor(props) {
-    super(props);
-  }
+import CustomHeader from "../../UI/CustomHeader";
 
-  componentWillMount(){
-  }
+class Home extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    header: null
+  });
 
   render() {
-    const navigation = this.props.navigation;
-    const increment = this.props.increment;
-    const i = this.props.i;
-
     return (
-      <View style={{height: 150, backgroundColor: 'green', padding: 50}}>
-        <Button onPress={() => {increment(); navigation.navigate('NotHome')}} title="You are at home" />
-        <Text>{i}</Text>
-      </View>
+      <Container>
+      <CustomHeader navigation={this.props.navigation} />
+      <Content>
+        <Text>Content</Text>
+      </Content>
+    </Container>
     );
   }
 }

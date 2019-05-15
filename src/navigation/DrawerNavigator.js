@@ -24,7 +24,7 @@ import MembersScreen from "../screens/Members/MemberScreen";
 // import MyConnectionsScreen from "../Screens/MyConnections/MyConnections";
 // import MyPendingConnectionsScreen from "../Screens/MyConnections/MyPendingConnections";
 // import Home from "../home/index";
-// import Login from "../Screens/Auth/Login";
+import Login from "../screens/Auth/Login";
 // import Events from "../Screens/Events/Events";
 // import EventDetails from "../Screens/EventDetails/EventDetails";
 // import Giev from "../Screens/Giev/Giev";
@@ -42,10 +42,10 @@ const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
 const WIDTH = Dimensions.get("window").width;
 
 const CustomDrawerContentComponent = props => (
-  <Container style={styles.container}>
+  <Container>
     <DrawerHeader />
     <Content>
-      <DrawerItems labelStyle={{ color: 'white' }} {...props} />
+      <DrawerItems {...props} />
     </Content>
   </Container>
 );
@@ -123,13 +123,13 @@ const DrawerNavigator = createDrawerNavigator(
   },
   DrawerConfig);
 
-// const LoginStackNavigator = createStackNavigator({
-//   Login: Login
-// })
+const LoginStackNavigator = createStackNavigator({
+  Login: Login
+})
 
 const AppSwitchNavigator = createSwitchNavigator({
   //AuthLoading: AuthLoading,
-  //Auth: LoginStackNavigator,
+  Auth: LoginStackNavigator,
   AppDrawer: DrawerNavigator
 })
 
