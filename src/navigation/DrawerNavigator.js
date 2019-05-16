@@ -30,7 +30,7 @@ import Login from "../screens/Auth/Login";
 // import Giev from "../Screens/Giev/Giev";
 // import Wishes from "../Screens/Wishes/Wishes";
 // import AuthLoading from "../Screens/Auth/AuthLoading";
-// import Logout from "../Screens/Auth/Logout";
+import Logout from "../screens/Auth/Logout";
 import Home from "../screens/Home/index";
 // import MembersProfile from "../Screens/Members/MembersProfile";
 // import Comments from "../Screens/Home/partials/Comments";
@@ -117,9 +117,9 @@ const DrawerNavigator = createDrawerNavigator(
     // Wishes: {
     //   screen: Wishes
     // },
-    // Logout: {
-    //   screen: Logout
-    // }
+    Logout: {
+      screen: Logout
+    }
   },
   DrawerConfig);
 

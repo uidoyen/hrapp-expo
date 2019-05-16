@@ -23,10 +23,11 @@ export default class Setup extends Component {
   }
   async componentWillMount() {
     await Expo.Font.loadAsync({
-      Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf"),
-      FontAwesome: require("native-base/Fonts/FontAwesome.ttf"),
+      'Roboto': require('native-base/Fonts/Roboto.ttf'),
+      'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
+      'Ionicons': require("@expo/vector-icons/fonts/Ionicons.ttf"),
+      'FontAwesome': require("native-base/Fonts/FontAwesome.ttf"),
     });
-
     this.setState({ isReady: true });
   }
 
@@ -35,9 +36,9 @@ export default class Setup extends Component {
       return <Expo.AppLoading />;
     }
     return (
-        <Provider store={this.state.store}>
-          <App />
-        </Provider>
+      <Provider store={this.state.store}>
+        <App />
+      </Provider>
     );
   }
 }

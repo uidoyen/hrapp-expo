@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import { Text, Container, Content} from "native-base";
 import { connect } from 'react-redux';
-import { increment } from '../../actions';
+//import { increment } from '../../actions';
 
 import CustomHeader from "../../UI/CustomHeader";
 
@@ -33,4 +33,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps)(Home);
