@@ -15,7 +15,7 @@ class Home extends Component {
       <Container>
       <CustomHeader navigation={this.props.navigation} />
       <Content>
-        <Text>Content</Text>
+        <Text>Content1</Text>
       </Content>
     </Container>
     );
