@@ -53,7 +53,7 @@ const CustomDrawerContentComponent = props => (
 const DrawerConfig = {
   drawerWidth: WIDTH * 0.63,
   contentComponent: CustomDrawerContentComponent,
-  initialRouteName: "Home"
+  //initialRouteName: "Home"
 };
 
 // const EventStackNavigator = createStackNavigator({
@@ -70,22 +70,10 @@ const DrawerConfig = {
 //     initialRouteName: 'Member',
 //   })
 
-const HomeStackNavigator = createStackNavigator({
-  Home: Home
-})
-
-// const CommunityStackNavigator = createStackNavigator({
-//   CommunityScreen: CommunityScreen,
-//   CommunityProfile: CommunityProfile
-// }, 
-// {
-//   initialRouteName: 'CommunityScreen',
-// })
-
 const DrawerNavigator = createDrawerNavigator(
   {
     Home: {
-      screen: HomeStackNavigator
+      screen: Home
     },
     // Members: {
     //   screen: MemberStackNavigator
@@ -122,7 +110,7 @@ const DrawerNavigator = createDrawerNavigator(
     }
   },
   DrawerConfig);
-
+  
 const LoginStackNavigator = createStackNavigator({
   Login: Login
 })

@@ -1,9 +1,8 @@
 import React, {Component} from "react";
 import { Text, Container, Content} from "native-base";
 import { connect } from 'react-redux';
-//import { increment } from '../../actions';
-
 import CustomHeader from "../../UI/CustomHeader";
+import AddPost from './AddPost';
 
 class Home extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -16,21 +15,17 @@ class Home extends Component {
       <CustomHeader navigation={this.props.navigation} />
       <Content>
         <Text>Content1</Text>
+        <AddPost />
       </Content>
     </Container>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-    return {
-      i: state.blank.i,
-    };
+const mapStateToProps = state => {
+  return state;
 };
 const mapDispatchToProps = (dispatch) => {
-    return {
-      increment: () => dispatch(increment()),
-    };
 };
 
 export default connect(mapStateToProps)(Home);

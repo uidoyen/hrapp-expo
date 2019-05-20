@@ -5,7 +5,7 @@ import { StyleSheet, View, Text, Image, AsyncStorage, KeyboardAvoidingView } fro
 import { Button, Item, Input, Label } from "native-base";
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
-import { loginUser } from '../../actions/authAction';
+import { loginUser, logoutUser } from '../../actions/authAction';
 
 export class Login extends Component {
   static navigationOptions = {
@@ -30,7 +30,7 @@ export class Login extends Component {
   handleFormSubmit = () => {
     this.props.loginUser({ email: "rsr.mukkara45@gmail.com", password: "Ranga@45" });
   };
-  
+
   render() {
     const {
       values,
@@ -41,12 +41,12 @@ export class Login extends Component {
       auth
     } = this.props;
     console.log(this.props)
-    // if(auth.isAuthenticated === true){
-    //   this.props.navigation.push("Home")
-    // }
+    if(auth.isAuthenticated === true && auth.isAuthenticating === false){
+      this.props.navigation.navigate("Home")
+    }
     return (
       <KeyboardAvoidingView
-        behavior="padding" 
+        behavior="padding"
         enabled
         style={{
           flex: 1,
@@ -56,12 +56,12 @@ export class Login extends Component {
         }}
       >
         <View style={styles.container}>
-          <View style={{alignItems: 'center'}}>
+          <View style={{ alignItems: 'center' }}>
             <Image
               source={require('../../../assets/edgeverve-logo.png')}
             />
           </View>
-          <Item 
+          <Item
             //floatingLabel 
             error={errors.email ? true : false}
           >
@@ -74,11 +74,11 @@ export class Login extends Component {
               value={values.email}
             />
           </Item>
-          { errors.email && <Text style={styles.error}>{errors.email}</Text> }
-          
-          <Item 
-          //floatingLabel
-          style={{marginTop: 20}}
+          {errors.email && <Text style={styles.error}>{errors.email}</Text>}
+
+          <Item
+            //floatingLabel
+            style={{ marginTop: 20 }}
           >
             <Label style={{ color: '#b997f7' }}>Password</Label>
             <Input
@@ -89,7 +89,7 @@ export class Login extends Component {
               value={values.password}
             />
           </Item>
-          { errors.password && <Text style={styles.error}>{errors.password}</Text> }
+          {errors.password && <Text style={styles.error}>{errors.password}</Text>}
           <Button
             block
             style={{
@@ -136,12 +136,12 @@ const mapStateToProps = state => {
 // const mapStateToProps = state => ({
 //   auth: state.authReducer
 // })
-const LoginForm = connect(mapStateToProps, { loginUser })(formikEnhancer)
+const LoginForm = connect(mapStateToProps, { loginUser, logoutUser })(formikEnhancer)
 export default LoginForm;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
+    flex: 1,
     justifyContent: 'center'
   },
   error: {
