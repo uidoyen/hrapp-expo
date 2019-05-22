@@ -17,7 +17,7 @@ The following dependencies are included:
 
 ## Usage
 
-`git clone https://github.com/Keftaa/expo-redux-boilerplate.git`  
+`git clone https://github.com/uidoyen/hrapp-expo.git`  
 `yarn install`  
 `expo start`  
 
