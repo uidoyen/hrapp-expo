@@ -31,6 +31,12 @@ export class Login extends Component {
     this.props.loginUser({ email: "rsr.mukkara45@gmail.com", password: "Ranga@45" });
   };
 
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.auth.isAuthenticated === true && nextProps.auth.isAuthenticating === false) {
+  //     this.props.navigation.navigate('Home')
+  //   }
+  // }
+
   render() {
     const {
       values,
@@ -41,7 +47,7 @@ export class Login extends Component {
       auth
     } = this.props;
     console.log(this.props)
-    if(auth.isAuthenticated === true && auth.isAuthenticating === false){
+    if(auth.isAuthenticated === true){
       this.props.navigation.navigate("Home")
     }
     return (

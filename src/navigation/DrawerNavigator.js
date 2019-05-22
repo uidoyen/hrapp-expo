@@ -38,6 +38,8 @@ import DrawerHeader from "./DrawerHeader";
 // import CommunityProfile from '../Screens/Community/CommunityProfile'
 // import AskLeaderQuestions from "../Screens/QuestionsForMe/partial/AskLeaderQuestions";
 
+import CameraRollSelect from "../screens/Home/CameraRollSelect";
+
 const uri = "https://facebook.github.io/react-native/docs/assets/favicon.png";
 const WIDTH = Dimensions.get("window").width;
 
@@ -52,7 +54,7 @@ const CustomDrawerContentComponent = props => (
 
 const DrawerConfig = {
   drawerWidth: WIDTH * 0.63,
-  contentComponent: CustomDrawerContentComponent,
+  contentComponent: CustomDrawerContentComponent
   //initialRouteName: "Home"
 };
 
@@ -109,24 +111,29 @@ const DrawerNavigator = createDrawerNavigator(
       screen: Logout
     }
   },
-  DrawerConfig);
-  
+  DrawerConfig
+);
+
 const LoginStackNavigator = createStackNavigator({
   Login: Login
-})
+});
+
+const MediaStackNavigator = createStackNavigator({
+  Media: CameraRollSelect
+});
 
 const AppSwitchNavigator = createSwitchNavigator({
   //AuthLoading: AuthLoading,
   Auth: LoginStackNavigator,
-  AppDrawer: DrawerNavigator
-})
-
+  AppDrawer: DrawerNavigator,
+  MediaUpload: MediaStackNavigator
+});
 
 export default createAppContainer(AppSwitchNavigator);
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#673AB7",
-    color: 'white'
+    color: "white"
   },
   content: {
     color: "white",

@@ -1,149 +1,208 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { StyleSheet, View, ScrollView, Image } from "react-native";
-import { Container, Header, Content, DeckSwiper, Card, CardItem, Thumbnail, Text, Button, Left, Body, Right } from 'native-base';
-import { getPosts, likePost, unlikePost, getPostId } from "../../../actions/postActions";
-import { withNavigation } from 'react-navigation';
-import Icon from 'react-native-vector-icons/FontAwesome'
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  Image,
+  TouchableOpacity
+} from "react-native";
+
+import {
+  Container,
+  Header,
+  Content,
+  DeckSwiper,
+  Card,
+  CardItem,
+  Thumbnail,
+  Text,
+  Button,
+  Left,
+  Body,
+  Right,
+  ActionSheet
+} from "native-base";
+import { getPosts } from "../../actions/postActions";
+import { withNavigation } from "react-navigation";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 class PostsContent extends Component {
-  state = {
-    expanded: false,
-    photoIndex: 0,
-    isOpen: false,
-
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      expanded: false,
+      photoIndex: 0,
+      isOpen: false
+    };
+  }
 
   openLightBox = () => {
-    this.setState({ isOpen: true })
-  }
+    this.setState({ isOpen: true });
+  };
 
-  handleLike = (id) => {
-    this.props.likePost(id)
-  }
+  handleLike = id => {
+    this.props.likePost(id);
+  };
 
-  handleUnLike = (id) => {
-    this.props.unlikePost(id)
-  }
+  handleUnLike = id => {
+    this.props.unlikePost(id);
+  };
 
-
-  userAlreadyLiked = (likes) => {
+  userAlreadyLiked = likes => {
     const { auth } = this.props;
     if (likes.filter(like => like.user === auth.user.id).length > 0) {
       return true;
     } else {
       return false;
     }
-
-  }
-  commentHandler = (id) => {
-    console.log(this.props)
-    this.props.navigation.navigate('Comments', { _id: id })
-  }
+  };
+  commentHandler = id => {
+    this.props.navigation.navigate("Comments", { _id: id });
+  };
   componentDidMount() {
-    console.log('post content section')
-    console.log(this.props)
-    this.props.getPosts()
+    this.props.getPosts();
   }
-
-  // componentDidUpdate() {
-  //   console.log('post content section second')
-  //  this.props.getPosts()
-  // }
 
   render() {
-    console.log(this.props)
-    const { posts } = this.props.post;
+    var BUTTONS = ["Option 0", "Option 1", "Option 2", "Delete", "Cancel"];
+    var DESTRUCTIVE_INDEX = 3;
+    var CANCEL_INDEX = 4;
     return (
-      <View>
-        {posts === null ? <View></View> :
-          posts.map((post) => {
-            return (
-              <Card key={post._id}>
-                <CardItem>
-                  <Left>
-                    <Thumbnail source={{ uri: post.avatar }} />
-                    <Body>
-                      <Text >{post.name}</Text>
-                      {/* <Text note>GeekyAnts</Text> */}
-                    </Body>
-                  </Left>
-                </CardItem>
-                {
-                  post.media[0] ? <CardItem>
-                    <Image source={{ uri: post.media[0] }} style={{ height: 200, width: null, flex: 1 }} />
-                  </CardItem> : null
-                }
-
-                {/* <CardItem cardBody>
-            {post.media === null ? <View></View> :
-            // <DeckSwiper dataSource={post.media} renderItem={item =>    
-              <Image source={{ uri:  item}} style={{ height: 200, width: null, flex: 1 }} />
-            }
-            
-            </CardItem> */}
-                <CardItem>
-                  <Body>
-                    <Text style={styles.postText}>
-                      {
-                        post.postText
-                      }
-                    </Text>
-                  </Body>
-                </CardItem>
-                {/* {
-              post.postText === null ? <View></View> :    <CardItem>
-             
-            </CardItem>
-            } */}
-
-                <CardItem>
-                  <Left>
+      <View style={styles.container}>
+        <View style={styles.containerInner}>
+          <CardItem>
+            <Left>
+              <Thumbnail source={require("../../../assets/76161.jpg")} />
+              <Body>
+                <Text>GeekyAnts</Text>
+                <Text style={styles.date}>May 19, 2019 9:52 PM</Text>
+              </Body>
+            </Left>
+            <Right>
+              <TouchableOpacity
+                onPress={() =>
+                  ActionSheet.show(
                     {
-                      this.userAlreadyLiked(post.likes) ? <Button transparent onPress={() => this.handleUnLike(post._id)}>
-                        <Icon size={25} color="#d62111" name="heart" />
-
-                      </Button>
-                        : <Button transparent onPress={() => this.handleLike(post._id)}>
-                          <Icon size={25} color="#d62111" name="heart-o" />
-                        </Button>
+                      options: BUTTONS,
+                      cancelButtonIndex: CANCEL_INDEX,
+                      destructiveButtonIndex: DESTRUCTIVE_INDEX,
+                      title: "Testing ActionSheet"
+                    },
+                    buttonIndex => {
+                      this.setState({ clicked: BUTTONS[buttonIndex] });
                     }
-                    <Text> {post.likes.length}</Text>
-                    {/* <Button transparent>
-                  <Icon name="heart" />
-                  <Text>12 Likes</Text>
-                  <Icon name="heart-outline" />
-                </Button> */}
-                  </Left>
-                  <Right>
-                    <Button transparent onPress={() => this.commentHandler(post._id)}>
-                      <Icon size={25} color="#673AB7" name="comment-o" />
-                      <Text>{post.comments.length} Comments</Text>
-                    </Button>
-                  </Right>
-                </CardItem>
-              </Card>
-            )
-          })
-        }
+                  )
+                }
+              >
+                <Image
+                  source={require("../../../assets/more.png")}
+                  style={{ height: 16, width: 16 }}
+                />
+              </TouchableOpacity>
+            </Right>
+          </CardItem>
+
+          <CardItem>
+            <Image
+              source={require("../../../assets/76161.jpg")}
+              style={{ height: 200, width: "100%" }}
+            />
+            <Body>
+              <Text>dfdsfsdfs</Text>
+            </Body>
+          </CardItem>
+
+          <CardItem style={{ paddingTop: 0, paddingBottom: 0 }}>
+            <Left>
+              <Button transparent onPress={() => this.handleLike()}>
+                <Icon size={22} color="#d62111" name="heart-o" />
+                <Text style={styles.text}>1</Text>
+              </Button>
+            </Left>
+            <Right>
+              <Button transparent onPress={() => this.commentHandler()}>
+                <Icon size={22} color="#673AB7" name="comment-o" />
+                <Text style={styles.text}>1 Comments</Text>
+              </Button>
+            </Right>
+          </CardItem>
+        </View>
+        <View style={styles.containerInner}>
+          <CardItem>
+            <Left>
+              <Thumbnail source={require("../../../assets/76161.jpg")} />
+              <Body>
+                <Text>GeekyAnts</Text>
+                <Text style={styles.date}>May 19, 2019 9:52 PM</Text>
+              </Body>
+            </Left>
+            <Right>
+              <TouchableOpacity
+                onPress={() =>
+                  ActionSheet.show(
+                    {
+                      options: BUTTONS,
+                      cancelButtonIndex: CANCEL_INDEX,
+                      destructiveButtonIndex: DESTRUCTIVE_INDEX,
+                      title: "Testing ActionSheet"
+                    },
+                    buttonIndex => {
+                      this.setState({ clicked: BUTTONS[buttonIndex] });
+                    }
+                  )
+                }
+              >
+                <Image
+                  source={require("../../../assets/more.png")}
+                  style={{ height: 16, width: 16 }}
+                />
+              </TouchableOpacity>
+            </Right>
+          </CardItem>
+
+          <CardItem>
+            <Body>
+              <Text style={styles.postText}>dfdsfsdfs</Text>
+            </Body>
+          </CardItem>
+
+          <CardItem>
+            <Left>
+              <Button transparent onPress={() => this.handleLike()}>
+                <Icon size={22} color="#d62111" name="heart-o" />
+                <Text style={styles.text}>1</Text>
+              </Button>
+            </Left>
+            <Right>
+              <Button transparent onPress={() => this.commentHandler()}>
+                <Icon size={22} color="#673AB7" name="comment-o" />
+                <Text style={styles.text}>1 Comments</Text>
+              </Button>
+            </Right>
+          </CardItem>
+        </View>
       </View>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  post: state.post,
-  auth: state.auth
-});
-
-const mapDispatchToProps = {};
+const mapStateToProps = state => {
+  return state;
+};
 
 export default connect(
   mapStateToProps,
-  { getPosts, likePost, unlikePost, getPostId }
+  { getPosts }
 )(withNavigation(PostsContent));
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#ddd"
+  },
+  containerInner: {
+    marginBottom: 12
+  },
   avatar: {
     width: 100,
     height: 100,
@@ -152,7 +211,11 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 12
   },
+  date: {
+    fontSize: 12,
+    color: "#555759"
+  },
   postText: {
-    color: '#212529'
+    color: "#212529"
   }
-})
+});
