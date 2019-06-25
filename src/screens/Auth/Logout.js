@@ -1,22 +1,29 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { View, Text, AsyncStorage } from "react-native";
+import { logoutUser } from '../../actions/authAction';
 
 export class Logout extends Component {
-   componentWillMount(){
-    console.log('in logout')
-    AsyncStorage.clear();
-    this.props.navigation.navigate('Auth')
-   }
+    componentWillMount() {
+        AsyncStorage.clear();
+        this.props.logoutUser()
+    }
 
-   render(){
-    return(
-        <View>
-            <Text>Logout</Text>
-        </View>
-    )
-}
- 
+    render() {
+        const { auth } = this.props;
+        if (auth.isAuthenticated === false) {
+            this.props.navigation.navigate("Login")
+        }
+        return (
+            <View>
+                <Text>Logout</Text>
+            </View>
+        )
+    }
+
 }
 
-export default Logout;
+const mapStateToProps = state => {
+    return state
+};
+export default connect(mapStateToProps, { logoutUser })(Logout);

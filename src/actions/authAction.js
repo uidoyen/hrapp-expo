@@ -19,24 +19,24 @@ export const registerUser = (userData, navigate) => dispatch => {
 
 export const loginUser = (data) => {
   return dispatch => {
-    dispatch({type: LOGIN_REQUEST})
+    dispatch({ type: LOGIN_REQUEST })
     return axios.post(`${API_GATEWAY}/api/users/login`, data)
-    .then(res => {
-      console.log(JSON.stringify(res))
-      if(res.status === 200){
-        const { token } = res.data;
-        AsyncStorage.setItem("jwtToken", token)
-        setAuthToken(token);
-        const decodedToken = jwt_decode(token);
-        dispatch(setCurrentUser(decodedToken));
-        dispatch({type: LOGIN_SUCCESS, payload: res.data})
-      }else{
-        dispatch({type: LOGIN_FAILURE, payload: res.message})
-      }
-    })
-    .catch(err => {
-      dispatch({type: LOGIN_FAILURE, payload: err})
-    })
+      .then(res => {
+        //console.log(JSON.stringify(res))
+        if (res.status === 200) {
+          const { token } = res.data;
+          AsyncStorage.setItem("jwtToken", token)
+          setAuthToken(token);
+          const decodedToken = jwt_decode(token);
+          dispatch(setCurrentUser(decodedToken));
+          dispatch({ type: LOGIN_SUCCESS, payload: res.data })
+        } else {
+          dispatch({ type: LOGIN_FAILURE, payload: res.message })
+        }
+      })
+      .catch(err => {
+        dispatch({ type: LOGIN_FAILURE, payload: err })
+      })
   }
 }
 
@@ -49,7 +49,7 @@ export const loginUser = (data) => {
 //       const { token } = res.data;
 //       AsyncStorage.setItem("jwtToken", token)
 //       setAuthToken(token);
-      
+
 //       const decodedToken = jwt_decode(token);
 //       dispatch(setCurrentUser(decodedToken));
 //     })
@@ -69,9 +69,9 @@ export const setCurrentUser = (decodedToken) => {
 
 //Logout user
 export const logoutUser = () => {
-    return {
-      type: SIGNOUT_REQUEST
-    }
+  return {
+    type: SIGNOUT_REQUEST
+  }
   // localStorage.removeItem('jwtToken');
   // setAuthToken(false);
   // dispatch(setCurrentUser({}));

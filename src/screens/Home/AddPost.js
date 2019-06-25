@@ -6,36 +6,33 @@ import {
   View,
   Text,
   TextInput,
+  SafeAreaView,
   TouchableOpacity,
-  Platform
+  Image,
+  ScrollView
 } from "react-native";
-import {
-  Container,
-  Header,
-  Thumbnail,
-  Content,
-  shareImage,
-  Button
-} from "native-base";
-import { Entypo, Feather, Foundation } from "@expo/vector-icons";
+import { Left, Right, Body, Title, Container, Thumbnail } from 'native-base';
+import { Ionicons, AntDesign, Entypo, Feather, Foundation } from "@expo/vector-icons";
 import { addPost } from "../../actions/postActions";
-import CameraRollSelect from "./CameraRollSelect";
+import ImageBrowser from "./ImageBrowser";
 
 class AddPost extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    header: null,
+    headerStyle: {
+      backgroundColor: '#673AB7',
+      height: 40
+    },
+    headerTintColor: '#fff',
+  })
   constructor(props) {
     super(props);
     this.state = {
-      status: "",
+      postText: "",
       imageBrowserOpen: false,
       photos: []
     };
   }
-  _imageBrowserOpen = () => {
-    this.props.navigation.navigate("MediaUpload");
-    this.setState({
-      imageBrowserOpen: true
-    });
-  };
   imageBrowserCallback = callback => {
     callback
       .then(photos => {
@@ -48,94 +45,130 @@ class AddPost extends Component {
       .catch(e => console.log(e));
   };
 
-  updateInputState = (key, value) => {
-    this.setState(prevState => {
-      return {
-        ...prevState,
-        [key]: value
-      };
-    });
-  };
+  sharePost = () => {
+    const formData = new FormData();
+    for (const file of this.state.photos) {
+      formData.append('image', file)
+    }
 
-  onPostSubmitHandler = () => {
-    this.props.addPost({ postText: this.state.text });
-  };
-  doSomething(images) {
-    console.log(images);
+    formData.append('postText', this.state.postText)
+    this.props.addPost(formData);
+    this.goBack();
   }
-  render() {
-    console.log(this.props);
+  goBack() {
+    const { navigation } = this.props;
+    navigation.goBack();
+    navigation.state.params.onSelect({ selected: true });
+  }
 
+  componentDidUpdate = () => {
+    // console.log('post added')
+  }
+
+  renderImage(item, i) {
     return (
-      <View>
-        {/* <CameraRollSelect
-          imageBrowserCallback={this.imageBrowserCallback}
-          imageBrowserOpen={this.state.imageBrowserOpen}
-          photos={this.state.photos}
-        /> */}
-        <Container
-          style={{
-            flexDirection: "column",
-            height: 140,
-            borderBottomColor: "#ddd",
-            borderBottomWidth: 12,
-            borderTopColor: "#ddd",
-            borderTopWidth: 0.5
-          }}
-        >
-          <View
+      <Image
+        style={{ height: 200, width: null }}
+        source={{ uri: item.file }}
+        key={i}
+      />
+    );
+  }
+
+  render() {
+    console.log(this.state)
+    console.log(this.props)
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+        <ScrollView style={styles.container}>
+          <View>
+            <View style={{ backgroundColor: '#673AB7', height: 50, flexDirection: 'row', paddingHorizontal: 10 }}>
+              <Left style={{ flex: 1 }}>
+                <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                  <Text style={styles.shareBtn}>Back</Text>
+                </TouchableOpacity>
+              </Left>
+              <Body style={{ flex: 3, justifyContent: 'center', alignItems: 'center' }}>
+                <Title style={{ color: 'white' }}>Create post</Title>
+              </Body>
+              <Right style={{ flex: 1 }}>
+                <TouchableOpacity onPress={() => this.sharePost()}>
+                  <Text style={styles.shareBtn}>Share</Text>
+                </TouchableOpacity>
+              </Right>
+            </View>
+          </View>
+
+          <Container
             style={{
-              flexDirection: "row"
+              flexDirection: "column"
             }}
           >
-            <View style={styles.shareImage}>
-              <Thumbnail source={require("../../../assets/76161.jpg")} />
+            <View
+              style={{
+                borderBottomColor: "#ddd",
+                borderBottomWidth: 0.5,
+                flexDirection: "row"
+              }}
+            >
+              <View style={styles.shareImage}>
+                <Thumbnail source={require("../../../assets/76161.jpg")} />
+              </View>
+              <TextInput
+                style={styles.textInput}
+                multiline={true}
+                numberOfLines={4}
+                placeholder="What do you want to share?"
+                onChangeText={postText => this.setState({ postText })}
+                value={this.state.postText}
+                underlineColorAndroid={"transparent"}
+              // onChangeText={val => this.updateInputState("status", val)}
+              />
             </View>
-            <TextInput
-              style={styles.textInput}
-              multiline={true}
-              numberOfLines={4}
-              placeholder="What do you want to share?"
-              onChangeText={status => this.setState({ status })}
-              value={this.state.status}
-              underlineColorAndroid={"transparent"}
-              onChangeText={val => this.updateInputState("status", val)}
-            />
-          </View>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-around" }}
-          >
-            <TouchableOpacity
-              //onPress={this._imageBrowserOpen}
-              style={styles.btnFlat}
+            <View
+              style={{ flexDirection: "column", paddingVertical: 10 }}
             >
-              <Entypo name="images" size={16} color="#10bc52" />
-              <Text style={{ color: "#673AB7", marginLeft: 10, fontSize: 11 }}>
-                PHOTOS
+              <View style={{
+                borderBottomColor: "#ddd",
+                borderBottomWidth: 0.5,
+                flexDirection: "row",
+                paddingVertical: 5,
+                paddingLeft: 10
+              }}>
+                <TouchableOpacity
+                  onPress={() => this.setState({ imageBrowserOpen: true })}
+                  style={styles.btnFlat}
+                >
+                  <Entypo name="images" size={20} color="#10bc52" />
+                  <Text style={{ color: "#673AB7", marginLeft: 10, fontSize: 11 }}>
+                    PHOTOS/VIDEOS
               </Text>
-            </TouchableOpacity>
+                </TouchableOpacity>
+              </View>
+              <View style={{
+                borderBottomColor: "#ddd",
+                borderBottomWidth: 0.5,
+                flexDirection: "row",
+                paddingVertical: 5,
+                paddingLeft: 10
+              }}>
+                <TouchableOpacity
+                  onPress={this._onPressButton}
+                  style={styles.btnFlat}
+                >
+                  <Ionicons name="ios-camera" size={28} color="#f99100" />
+                  <Text style={{ color: "#673AB7", marginLeft: 10, fontSize: 11 }}>
+                    CAMERA
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            {this.state.imageBrowserOpen && <ImageBrowser max={4} callback={this.imageBrowserCallback} />}
+            {this.state.photos.map((item, i) => this.renderImage(item, i))}
+          </Container>
 
-            <TouchableOpacity
-              onPress={this._onPressButton}
-              style={styles.btnFlat}
-            >
-              <Feather name="video" size={16} color="#673AB7" />
-              <Text style={{ color: "#673AB7", marginLeft: 10, fontSize: 11 }}>
-                VIDEOS
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={this._onPressButton}
-              style={[styles.btnFlat, { borderRightWidth: 0 }]}
-            >
-              <Foundation name="comments" size={18} color="#f99100" />
-              <Text style={{ color: "#673AB7", marginLeft: 10, fontSize: 11 }}>
-                SHARES
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Container>
-      </View>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }
@@ -167,15 +200,19 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
     borderWidth: 0.5
   },
-  shareBtn: {},
+  shareBtn: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: 'bold'
+  },
 
   btnFlat: {
     backgroundColor: "white",
     color: "white",
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: 4,
+    alignItems: 'center',
+    flexDirection: "row",
+    paddingVertical: 6,
     borderRadius: 0,
     borderRightWidth: 0,
     borderBottomWidth: 0,

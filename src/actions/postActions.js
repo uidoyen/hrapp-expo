@@ -3,6 +3,7 @@ import {
   ADD_POST,
   GET_ERRORS,
   GET_POSTS,
+  GET_POSTS_ERROR,
   UNAPPROVED_POSTS,
   APPROVE_POST,
   PRELOADER,
@@ -31,24 +32,6 @@ export const addPost = postData => dispatch => {
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
-      });
-    });
-};
-
-export const getPosts = () => dispatch => {
-  axios
-    .get(`${API_GATEWAY}/api/posts`)
-    .then(res => {
-      console.log(res);
-      dispatch({
-        type: GET_POSTS,
-        payload: res.data
-      });
-    })
-    .catch(() => {
-      dispatch({
-        type: GET_POSTS,
-        payload: null
       });
     });
 };
@@ -200,7 +183,7 @@ export const getPostId = postId => dispatch => {
     .catch(() => {
       dispatch({
         type: GET_POST_ID,
-        payload: null
+        payload: []
       });
     });
 };

@@ -1,30 +1,27 @@
 import { AsyncStorage } from "react-native";
-import devTools from "remote-redux-devtools";
 import { createStore, applyMiddleware, compose } from "redux";
-import thunk from "redux-thunk";
 import { persistStore, persistReducer } from "redux-persist";
+import { createLogger } from 'redux-logger';
+import thunk from "redux-thunk";
 import rootReducer from "../reducers";
-import devToolsEnhancer from "remote-redux-devtools";
-import storage from "redux-persist/lib/storage"; // defaults to localStorage for web and AsyncStorage for react-native
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 const persistConfig = {
   key: "root",
-  storage
+  storage: AsyncStorage
 };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
-export default function configureStore(onCompletion: () => void): any {
-  const enhancer = compose(
-    applyMiddleware(thunk),
-    devToolsEnhancer({
-      name: "MyApp",
-      realtime: true
-    })
-  );
-
-  let store = createStore(persistedReducer, enhancer);
-  let persistor = persistStore(store, null, onCompletion);
-
-  return store;
+const middlewares = [thunk];
+if (__DEV__) {
+  middlewares.push(createLogger());
 }
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
+export const store = createStore(
+  persistedReducer,
+  undefined,
+  composeWithDevTools(applyMiddleware(...middlewares)),
+);
+export const persistor = persistStore(store);
+

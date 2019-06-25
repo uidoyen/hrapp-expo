@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
-import { StyleSheet, View, Text, Image, AsyncStorage, KeyboardAvoidingView } from "react-native";
+import { StyleSheet, View, Text, Image, SafeAreaView, KeyboardAvoidingView } from "react-native";
 import { Button, Item, Input, Label } from "native-base";
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
 import { loginUser, logoutUser } from '../../actions/authAction';
-
+import { LinearGradient } from "expo";
+import ImageResizeMode from 'react-native/Libraries/Image/ImageResizeMode'
 export class Login extends Component {
   static navigationOptions = {
     header: null
@@ -46,77 +47,87 @@ export class Login extends Component {
       handleSubmit,
       auth
     } = this.props;
-    console.log(this.props)
-    if(auth.isAuthenticated === true){
+
+    if (auth.isAuthenticated === true) {
       this.props.navigation.navigate("Home")
     }
     return (
-      <KeyboardAvoidingView
-        behavior="padding"
-        enabled
-        style={{
-          flex: 1,
-          backgroundColor: "#673AB7",
-          justifyContent: "center",
-          padding: 20
-        }}
-      >
-        <View style={styles.container}>
-          <View style={{ alignItems: 'center' }}>
-            <Image
-              source={require('../../../assets/edgeverve-logo.png')}
-            />
-          </View>
-          <Item
-            //floatingLabel 
-            error={errors.email ? true : false}
-          >
-            <Label style={{ color: '#b997f7' }}>Email</Label>
-            <Input
-              name="email"
-              type="email"
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              value={values.email}
-            />
-          </Item>
-          {errors.email && <Text style={styles.error}>{errors.email}</Text>}
-
-          <Item
-            //floatingLabel
-            style={{ marginTop: 20 }}
-          >
-            <Label style={{ color: '#b997f7' }}>Password</Label>
-            <Input
-              name="password"
-              type="password"
-              onChangeText={handleChange('password')}
-              onBlur={handleBlur('password')}
-              value={values.password}
-            />
-          </Item>
-          {errors.password && <Text style={styles.error}>{errors.password}</Text>}
-          <Button
-            block
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+        <LinearGradient
+          colors={['#4568DC', '#B06AB3']}
+          style={styles.container}
+        >
+          <KeyboardAvoidingView
+            behavior="padding"
+            enabled
             style={{
-              marginVertical: 20,
-              backgroundColor: 'white'
+              flex: 1,
+              justifyContent: "center",
+              padding: 20
             }}
-            onPress={handleSubmit}
           >
-            <Text
-              style={{
-                color: "#673AB7",
-                fontFamily: "Roboto",
-                fontWeight: "bold",
-                fontSize: 18
-              }}
-            >
-              SIGN IN
+            <View style={styles.container}>
+              <View style={{ alignItems: 'center' }}>
+                <Image
+                  source={require('../../../assets/100-white.png')}
+                  style={{ width: 200, height: 100, resizeMode: 'contain' }}
+                />
+              </View>
+              <Item
+                //floatingLabel 
+                error={errors.email ? true : false}
+              >
+                <Label style={{ color: '#b997f7' }}>Email</Label>
+                <Input
+                  name="email"
+                  style={{ color: 'white' }}
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  value={values.email}
+                  autoCapitalize='none'
+                />
+              </Item>
+              {errors.email && <Text style={styles.error}>{errors.email}</Text>}
+
+              <Item
+                //floatingLabel
+                style={{ marginTop: 20 }}
+              >
+                <Label style={{ color: '#b997f7' }}>Password</Label>
+                <Input
+                  name="password"
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  value={values.password}
+                  secureTextEntry={true}
+                  autoCapitalize='none'
+                  style={{ color: 'white' }}
+                />
+              </Item>
+              {errors.password && <Text style={styles.error}>{errors.password}</Text>}
+              <Button
+                block
+                style={{
+                  marginVertical: 20,
+                  backgroundColor: 'white',
+                  borderRadius: 50
+                }}
+                onPress={handleSubmit}
+              >
+                <Text
+                  style={{
+                    color: "#4568DC",
+                    fontFamily: "Montserrat-SemiBold",
+                    fontSize: 15
+                  }}
+                >
+                  SIGN IN
           </Text>
-          </Button>
-        </View>
-      </KeyboardAvoidingView>
+              </Button>
+            </View>
+          </KeyboardAvoidingView>
+        </LinearGradient>
+      </SafeAreaView>
     );
   }
 }
@@ -136,9 +147,9 @@ const formikEnhancer = withFormik({
   displayName: 'Login',
 })(Login);
 
-const mapStateToProps = state => {
-  return state
-}
+const mapStateToProps = state => ({
+  auth: state.auth
+})
 // const mapStateToProps = state => ({
 //   auth: state.authReducer
 // })

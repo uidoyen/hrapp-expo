@@ -1,6 +1,7 @@
 import React from 'react'
-import { StyleSheet, View, Image } from 'react-native'
-import { Header, Body, Title, Content, Left, Icon, Right, Center } from 'native-base'
+import { StyleSheet, View, Image, TouchableOpacity } from 'react-native'
+import { Header, Body, Title, Item, Left, Icon, Right, Input, Button, Text, Badge } from 'native-base'
+import { Ionicons, AntDesign } from '@expo/vector-icons';
 export default class CustomHeader extends React.Component {
 	state = {
 		search: '',
@@ -11,27 +12,26 @@ export default class CustomHeader extends React.Component {
 	render() {
 		return (
 			<View>
-				<Header style={{ backgroundColor: '#673AB7' }}>
+				<View style={{ backgroundColor: '#673AB7', height: 60, flexDirection: 'row', paddingHorizontal: 10 }}>
 					<Left style={{ flex: 1 }}>
-						<Icon
-							style={styles.menuIcon}
-							name="ios-menu"
-							onPress={() => this.props.navigation.toggleDrawer()}
-						/>
+						<TouchableOpacity onPress={() => this.props.navigation.toggleDrawer()}>
+							<AntDesign name="bars" size={36} color="white" />
+						</TouchableOpacity>
 					</Left>
 					<Body style={{ flex: 3, justifyContent: 'center', alignItems: 'center' }}>
-						{/* <Title>{this.props.title}</Title> */}
-						<Image style={styles.img} source={require('../../assets/Logo.png')} />
+						{this.props.title && <Title style={{ color: 'white' }}>{this.props.title}</Title>}
+						{!this.props.title && <Image
+							source={require('../../assets/100-white.png')}
+							style={{ width: 150, height: 60, resizeMode: 'contain' }}
+						/>}
 					</Body>
 					<Right style={{ flex: 1 }}>
-						<Icon
-							name="notifications"
-							size={32}
-							style={styles.menuIcon}
-						/>
+						<TouchableOpacity onPress={() => this.props.navigation.navigate('Notification')}>
+							<Badge style={{ top: -5, right: -10, paddingTop: 0, paddingBottom: 0, position: 'absolute', zIndex: 2 }}><Text style={{ fontSize: 11 }}>2</Text></Badge>
+							<Ionicons name={this.props.icon} size={38} color="white" style={styles.menuIcon} />
+						</TouchableOpacity>
 					</Right>
-				</Header>
-				
+				</View>
 			</View>
 		)
 	}
@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		width: '100%',
-		backgroundColor: 'red'
 	},
 	img: {
 		height: 30,

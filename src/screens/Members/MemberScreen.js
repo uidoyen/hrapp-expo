@@ -2,27 +2,28 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { View, Text } from 'react-native'
+import {
+  getAllProfiles,
+  getUserProfilesById,
+  getUserProfile
+} from "./../../actions/profileAction";
 
 export class MemberScreen extends Component {
-  static propTypes = {
-    prop: PropTypes
+  componentDidMount = () => {
+    this.props.getAllProfiles()
   }
-
   render() {
+    // console.log(this.props)
     return (
       <View>
-        <Text>Hello</Text>
+        <Text>Helloo</Text>
       </View>
     )
   }
 }
 
 const mapStateToProps = (state) => ({
-  
+  state
 })
 
-const mapDispatchToProps = {
-  
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(MemberScreen)
+export default connect(mapStateToProps, { getAllProfiles })(MemberScreen)

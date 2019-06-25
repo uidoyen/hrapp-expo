@@ -5,19 +5,21 @@ const initialState = {
   isAuthenticating: false,
   isAuthenticated: false,
   isAuthenticatingError: null,
-  user: {}
+  user: {
+    role: ''
+  }
 }
 
-const authReducer = (state = initialState , action) => {
-  switch(action.type) {
+const authReducer = (state = initialState, action) => {
+  switch (action.type) {
     case LOGIN_REQUEST:
       return {
         ...state, isAuthenticating: true
       };
     case LOGIN_FAILURE:
       return {
-        ...state, 
-        isAuthenticating: false, 
+        ...state,
+        isAuthenticating: false,
         isAuthenticatingError: action.payload
       };
     case LOGIN_SUCCESS:
@@ -26,14 +28,16 @@ const authReducer = (state = initialState , action) => {
         isAuthenticating: false,
         isAuthenticated: true
       };
-      case SET_CURRENT_USER:
+    case SET_CURRENT_USER:
       return {
         ...state,
         user: action.payload
-      }  
-      case SIGNOUT_REQUEST: 
+      }
+    case SIGNOUT_REQUEST:
       return {
-        ...state = undefined
+        ...state = undefined,
+        isAuthenticating: false,
+        isAuthenticated: false
       }
     default:
       return state;
